@@ -1,9 +1,9 @@
 package cached
 
 import (
+	"context"
 	"fmt"
-
-	"github.com/codingsince1985/geo-golang"
+	"github.com/altiscope/geo-golang"
 	"github.com/patrickmn/go-cache"
 )
 
@@ -18,13 +18,13 @@ func Geocoder(geocoder geo.Geocoder, cache *cache.Cache) geo.Geocoder {
 }
 
 // Geocode returns location for address
-func (c cachedGeocoder) Geocode(address string) (*geo.Location, error) {
+func (c cachedGeocoder) Geocode(ctx context.Context, address string) (*geo.Location, error) {
 	// Check if we've cached this response
 	if cachedLoc, found := c.Cache.Get(address); found {
 		return cachedLoc.(*geo.Location), nil
 	}
 
-	if loc, err := c.Geocoder.Geocode(address); err != nil {
+	if loc, err := c.Geocoder.Geocode(ctx, address); err != nil {
 		return loc, err
 	} else {
 		c.Cache.Set(address, loc, 0)
@@ -33,14 +33,14 @@ func (c cachedGeocoder) Geocode(address string) (*geo.Location, error) {
 }
 
 // ReverseGeocode returns address for location
-func (c cachedGeocoder) ReverseGeocode(lat, lng float64) (*geo.Address, error) {
+func (c cachedGeocoder) ReverseGeocode(ctx context.Context, lat, lng float64) (*geo.Address, error) {
 	// Check if we've cached this response
 	locKey := fmt.Sprintf("geo.Location{%f,%f}", lat, lng)
 	if cachedAddr, found := c.Cache.Get(locKey); found {
 		return cachedAddr.(*geo.Address), nil
 	}
 
-	if addr, err := c.Geocoder.ReverseGeocode(lat, lng); err != nil {
+	if addr, err := c.Geocoder.ReverseGeocode(ctx, lat, lng); err != nil {
 		return nil, err
 	} else {
 		c.Cache.Set(locKey, addr, 0)

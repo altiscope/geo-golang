@@ -1,12 +1,13 @@
 package chained_test
 
 import (
+	"context"
+	"github.com/altiscope/geo-golang"
+	"github.com/altiscope/geo-golang/chained"
+	"github.com/altiscope/geo-golang/data"
 	"strings"
 	"testing"
 
-	"github.com/codingsince1985/geo-golang"
-	"github.com/codingsince1985/geo-golang/chained"
-	"github.com/codingsince1985/geo-golang/data"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -39,24 +40,28 @@ var (
 )
 
 func TestGeocode(t *testing.T) {
-	location, err := geocoder.Geocode(addressFixture.FormattedAddress)
+	ctx := context.TODO()
+	location, err := geocoder.Geocode(ctx, addressFixture.FormattedAddress)
 	assert.NoError(t, err)
 	assert.Equal(t, geo.Location{locationFixture.Lat, locationFixture.Lng}, *location)
 }
 
 func TestReverseGeocode(t *testing.T) {
-	address, err := geocoder.ReverseGeocode(locationFixture.Lat, locationFixture.Lng)
+	ctx := context.TODO()
+	address, err := geocoder.ReverseGeocode(ctx, locationFixture.Lat, locationFixture.Lng)
 	assert.NoError(t, err)
 	assert.True(t, strings.HasSuffix(address.FormattedAddress, "Melbourne, Victoria 3000, Australia"))
 }
 
 func TestReverseGeocodeWithNoResult(t *testing.T) {
-	addr, err := geocoder.ReverseGeocode(0, 0)
+	ctx := context.TODO()
+	addr, err := geocoder.ReverseGeocode(ctx, 0, 0)
 	assert.Nil(t, err)
 	assert.Nil(t, addr)
 }
 
 func TestChainedGeocode(t *testing.T) {
+	ctx := context.TODO()
 	mock1 := data.Geocoder(
 		data.AddressToLocation{
 			geo.Address{FormattedAddress: "Austin,TX"}: geo.Location{Lat: 1, Lng: 2},
@@ -73,15 +78,15 @@ func TestChainedGeocode(t *testing.T) {
 
 	c := chained.Geocoder(mock1, mock2)
 
-	l, err := c.Geocode("Austin,TX")
+	l, err := c.Geocode(ctx, "Austin,TX")
 	assert.NoError(t, err)
 	assert.Equal(t, geo.Location{Lat: 1, Lng: 2}, *l)
 
-	l, err = c.Geocode("Dallas,TX")
+	l, err = c.Geocode(ctx, "Dallas,TX")
 	assert.NoError(t, err)
 	assert.Equal(t, geo.Location{Lat: 3, Lng: 4}, *l)
 
-	addr, err := c.Geocode("NOWHERE,TX")
+	addr, err := c.Geocode(ctx, "NOWHERE,TX")
 	assert.Nil(t, err)
 	assert.Nil(t, addr)
 }

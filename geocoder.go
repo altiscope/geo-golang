@@ -2,14 +2,15 @@
 package geo
 
 import (
+	"context"
 	"io"
 	"log"
 )
 
 // Geocoder can look up (lat, long) by address and address by (lat, long)
 type Geocoder interface {
-	Geocode(address string) (*Location, error)
-	ReverseGeocode(lat, lng float64) (*Address, error)
+	Geocode(ctx context.Context, address string) (*Location, error)
+	ReverseGeocode(ctx context.Context, lat, lng float64) (*Address, error)
 }
 
 // Location is the output of Geocode
