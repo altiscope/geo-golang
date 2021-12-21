@@ -40,7 +40,7 @@ type HTTPGeocoder struct {
 }
 
 // Geocode returns location for address
-func (g HTTPGeocoder) Geocode(address string) (*Location, error) {
+func (g HTTPGeocoder) Geocode(ctx context.Context, address string) (*Location, error) {
 	responseParser := g.ResponseParserFactory()
 
 	ctx, cancel := context.WithTimeout(context.TODO(), DefaultTimeout)
@@ -76,7 +76,7 @@ func (g HTTPGeocoder) Geocode(address string) (*Location, error) {
 }
 
 // ReverseGeocode returns address for location
-func (g HTTPGeocoder) ReverseGeocode(lat, lng float64) (*Address, error) {
+func (g HTTPGeocoder) ReverseGeocode(ctx context.Context, lat, lng float64) (*Address, error) {
 	responseParser := g.ResponseParserFactory()
 
 	ctx, cancel := context.WithTimeout(context.TODO(), DefaultTimeout)
