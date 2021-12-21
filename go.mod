@@ -1,6 +1,6 @@
-module github.com/codingsince1985/geo-golang
+module github.com/altiscope/geo-golang
 
-go 1.14
+go 1.16
 
 require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible

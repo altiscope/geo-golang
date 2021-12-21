@@ -1,3 +1,5 @@
+github.com/codingsince1985/geo-golang v1.8.1 h1:6B+Ce5QkbSglCtesiNRkSYMRDDQsYrv4XKM3jJVdyTw=
+github.com/codingsince1985/geo-golang v1.8.1/go.mod h1:Ue7HAjKwwCAbqB5Q0YskqqnIX8XjMHL5Jq2fsSrI2T8=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/patrickmn/go-cache v2.1.0+incompatible h1:HRMgzkcYKYpi3C8ajMPV8OFXaaRUnok+kx1WdO15EQc=
