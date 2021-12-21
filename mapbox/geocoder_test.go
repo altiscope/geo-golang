@@ -1,56 +1,61 @@
 package mapbox_test
 
 import (
+	"context"
+	"github.com/altiscope/geo-golang"
+	"github.com/altiscope/geo-golang/mapbox"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"strings"
 	"testing"
 
-	"github.com/codingsince1985/geo-golang"
-	"github.com/codingsince1985/geo-golang/mapbox"
 	"github.com/stretchr/testify/assert"
 )
 
 var token = os.Getenv("MAPBOX_API_KEY")
 
 func TestGeocode(t *testing.T) {
+	ctx := context.TODO()
 	ts := testServer(response1)
 	defer ts.Close()
 
 	geocoder := mapbox.Geocoder(token, ts.URL+"/")
-	location, err := geocoder.Geocode("60 Collins St, Melbourne VIC 3000")
+	location, err := geocoder.Geocode(ctx, "60 Collins St, Melbourne VIC 3000")
 	assert.NoError(t, err)
 	assert.Equal(t, geo.Location{Lat: -37.813754, Lng: 144.971756}, *location)
 }
 
 func TestReverseGeocode(t *testing.T) {
+	ctx := context.TODO()
 	ts := testServer(response2)
 	defer ts.Close()
 
 	geocoder := mapbox.Geocoder(token, ts.URL+"/")
-	address, err := geocoder.ReverseGeocode(-37.813754, 144.971756)
+	address, err := geocoder.ReverseGeocode(ctx, -37.813754, 144.971756)
 	assert.NoError(t, err)
 	assert.True(t, strings.Index(address.FormattedAddress, "60 Collins St") >= 0)
 }
 
 func TestReverseGeocodeWithNumberAddress(t *testing.T) {
+	ctx := context.TODO()
 	ts := testServer(response4)
 	defer ts.Close()
 
 	geocoder := mapbox.Geocoder(token, ts.URL+"/")
-	address, err := geocoder.ReverseGeocode(-4.370522, 48.377621)
+	address, err := geocoder.ReverseGeocode(ctx, -4.370522, 48.377621)
 	assert.NoError(t, err)
 	assert.True(t, strings.Index(address.FormattedAddress, "23 Rue Paul Gauguin, Plougastel-Daoulas, Finistère 29470, France") >= 0)
 	assert.True(t, strings.Index(address.HouseNumber, "23") >= 0)
 }
 
 func TestReverseGeocodeWithNoResult(t *testing.T) {
+	ctx := context.TODO()
 	ts := testServer(response3)
 	defer ts.Close()
 
 	geocoder := mapbox.Geocoder(token, ts.URL+"/")
-	addr, err := geocoder.ReverseGeocode(-37.813754, 164.971756)
+	addr, err := geocoder.ReverseGeocode(ctx, -37.813754, 164.971756)
 	assert.Nil(t, err)
 	assert.Nil(t, addr)
 }

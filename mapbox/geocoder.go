@@ -4,9 +4,8 @@ package mapbox
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/altiscope/geo-golang"
 	"strings"
-
-	"github.com/codingsince1985/geo-golang"
 )
 
 type (
